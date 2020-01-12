@@ -1,5 +1,5 @@
 .BreadBottom {
-  height: 13%;
+  height: 15%;
   width: 80%;
   background: linear-gradient(#F08E4A, #e27b36);
   border-radius: 0 0 30px 30px;
@@ -8,7 +8,7 @@
 }
 
 .BreadTop {
-  height: 20%;
+  height: 25%;
   width: 80%;
   background: linear-gradient(#bc581e, #e27b36);
   border-radius: 50% 50% 0 0;
