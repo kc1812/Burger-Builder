@@ -70,40 +70,27 @@ class BurgerBuilder extends Component {
     this.setState({ purchasing: false });
   }
   purchaseContinueHandler = () => {
-    // alert("You Can continue!");
-    this.setState({ loading: true });
-    const order = {
-      ingredients: this.state.ingredients,
-      price: this.state.totalPrice,
-      customer: {
-        name: 'Kunal',
-        address: {
-          street: 'TestStreet1',
-          zipCode: '560102',
-          country: 'India'
-        },
-        email: 'test@test.gmail.com'
-      },
-      deliveryMethod: 'fastest'
+    const queryParams = [];
+    for (let i in this.state.ingredients) {
+      queryParams.push(encodeURI(i) + '=' + encodeURI(this.state.ingredients[i]));
     }
-    axios.post('/orders.json', order)
-      .then(response => {
-        this.setState({ loading: false, purchasing:false });
-      })
-      .catch(error => {
-        this.setState({ loading: false, purchasing:false });
-      });
+    queryParams.push('price=' + this.state.totalPrice);
+    const queryString = queryParams.join('&');
+    this.props.history.push({
+      pathname: '/checkout',
+      search: '?' + queryString
+    });
 
   }
 
-  componentDidMount(){
+  componentDidMount() {
     axios.get('https://react-burger-26615.firebaseio.com/ingredients.json')
-        .then(response=>{
-          this.setState({ingredients:response.data});
-        })
-        .catch(error=>{
-          this.setState({error: true});
-        })
+      .then(response => {
+        this.setState({ ingredients: response.data });
+      })
+      .catch(error => {
+        this.setState({ error: true });
+      })
   }
   render() {
     const disabledInfo = {
@@ -113,8 +100,8 @@ class BurgerBuilder extends Component {
       disabledInfo[key] = disabledInfo[key] <= 0;
     }
     let orderSummary = null;
-    let burger = this.state.error?<p>Ingredients can't be loaded</p>:<Spinner />;
-    if(this.state.ingredients){
+    let burger = this.state.error ? <p>Ingredients can't be loaded</p> : <Spinner />;
+    if (this.state.ingredients) {
       burger = (
         <Aux>
           <Burger ingredients={this.state.ingredients} />
@@ -150,4 +137,4 @@ class BurgerBuilder extends Component {
   }
 }
 
-export default withErrorHandler(BurgerBuilder,axios);
+export default withErrorHandler(BurgerBuilder, axios);
